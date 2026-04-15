@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#185FA5">
+<title>Checklist Equipamentos — Demax</title>
+<style>
+  :root {
+    --bg: #ffffff; --bg2: #f5f5f5; --bg3: #efefef;
+    --text: #1a1a1a; --text2: #666; --text3: #999;
+    --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.20);
+    --blue: #185FA5; --blue-bg: #EEF5FC; --blue-text: #0C447C;
+    --green: #0F6E56; --green-bg: #E1F5EE; --green-text: #085041;
+    --amber: #854F0B; --amber-bg: #FEF3E2; --amber-text: #412402;
+    --red: #993C1D; --red-bg: #FAECE7; --red-text: #4A1B0C;
+    --ok-bg: #E1F5EE; --ok-text: #085041;
+    --pend-bg: #FEF3E2; --pend-text: #412402;
+    --avaria-bg: #FAECE7; --avaria-text: #4A1B0C;
+    --novo-bg: #f0f0f0; --novo-text: #666;
+    --r: 10px; --r-sm: 6px;
+    --shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #1a1a1a; --bg2: #252525; --bg3: #2f2f2f;
+      --text: #f0f0f0; --text2: #aaa; --text3: #777;
+      --border: rgba(255,255,255,0.10); --border2: rgba(255,255,255,0.18);
+      --blue-bg: #0d2e52; --blue-text: #90c4f0;
+      --green-bg: #073d30; --green-text: #6dd4b0;
+      --amber-bg: #3d2800; --amber-text: #f0b060;
+      --ok-bg: #073d30; --ok-text: #6dd4b0;
+      --pend-bg: #3d2800; --pend-text: #f0b060;
+      --avaria-bg: #4a1a10; --avaria-text: #f09070;
+      --novo-bg: #333; --novo-text: #999;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg2); color: var(--text); font-size: 16px; }
+  .app { max-width: 520px; margin: 0 auto; min-height: 100vh; background: var(--bg2); padding-bottom: 40px; }
+
+  /* TOPBAR */
+  .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 13px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
+  .topbar h1 { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .back-btn { background: none; border: none; cursor: pointer; padding: 4px 6px; color: var(--text2); font-size: 22px; line-height: 1; flex-shrink: 0; }
+  .admin-btn { background: none; border: 0.5px solid var(--border2); border-radius: var(--r-sm); padding: 5px 11px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: inherit; flex-shrink: 0; }
+
+  /* SCREEN */
+  .screen { padding: 14px 16px; }
+
+  /* CARDS */
+  .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
+  .card-body { padding: 14px 16px; }
+
+  /* LIST ITEMS */
+  .list-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); transition: background .1s; user-select: none; }
+  .list-item:last-child { border-bottom: none; }
+  .list-item:active { background: var(--bg2); }
+  .eq-icon { width: 40px; height: 40px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; }
+
+  /* BADGES */
+  .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
+  .b-ok { background: var(--ok-bg); color: var(--ok-text); }
+  .b-pend { background: var(--pend-bg); color: var(--pend-text); }
+  .b-avaria { background: var(--avaria-bg); color: var(--avaria-text); }
+  .b-novo { background: var(--novo-bg); color: var(--novo-text); }
+  .b-ct { background: var(--blue-bg); color: var(--blue-text); font-size: 10px; padding: 2px 7px; }
+
+  /* CHECKLIST ITEMS */
+  .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
+  .check-item:last-child { border-bottom: none; }
+  .chkbox { width: 24px; height: 24px; border: 2px solid var(--border2); border-radius: 6px; flex-shrink: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; margin-top: 0; transition: all .12s; }
+  .chkbox.on { background: var(--blue); border-color: var(--blue); }
+  .chkbox.on::after { content: '✓'; color: #fff; font-size: 14px; font-weight: 700; }
+  .ck-title { font-size: 14px; color: var(--text); line-height: 1.45; }
+  .ck-how { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
+
+  /* SECTION BANNERS */
+  .sec-banner { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: var(--r-sm); margin: 10px 0 6px; }
+  .sb-uso { background: #E6F1FB; } .sb-uso .sbl { color: #0C447C; }
+  .sb-guarda { background: #FEF3E2; } .sb-guarda .sbl { color: #633806; }
+  .sb-transfer { background: #E8F5E9; } .sb-transfer .sbl { color: #27500A; }
+
+  /* PROGRESS */
+  .prog-bar { height: 4px; background: var(--bg3); border-radius: 2px; margin: 6px 0 3px; overflow: hidden; }
+  .prog-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width .25s; }
+  .prog-txt { font-size: 12px; color: var(--text2); }
+
+  /* FORMS */
+  label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 5px; }
+  input[type=text], input[type=password], textarea, select {
+    width: 100%; padding: 10px 12px; border: 0.5px solid var(--border2);
+    border-radius: var(--r-sm); font-size: 14px; background: var(--bg);
+    color: var(--text); font-family: inherit; outline: none;
+    -webkit-appearance: none; appearance: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,.15); }
+  textarea { min-height: 80px; resize: vertical; }
+  .field { margin-bottom: 14px; }
+
+  /* BUTTONS */
+  .btn { width: 100%; padding: 13px; border: none; border-radius: var(--r-sm); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .12s, transform .08s; -webkit-tap-highlight-color: transparent; }
+  .btn:active { transform: scale(0.98); }
+  .btn-p { background: var(--blue); color: #fff; }
+  .btn-p:hover { opacity: .92; }
+  .btn-p:disabled { opacity: .35; cursor: default; transform: none; }
+  .btn-s { background: none; border: 0.5px solid var(--border2); color: var(--text); margin-top: 8px; }
+  .btn-s:hover { background: var(--bg2); }
+
+  /* CONDITION SELECTOR */
+  .cond-g { display: flex; gap: 8px; }
+  .copt { flex: 1; padding: 10px 6px; border: 2px solid var(--border); border-radius: var(--r-sm); cursor: pointer; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); transition: all .12s; }
+  .cok { border-color: #0F6E56; background: var(--ok-bg); color: var(--ok-text); }
+  .cpend { border-color: #854F0B; background: var(--pend-bg); color: var(--pend-text); }
+  .cavaria { border-color: #993C1D; background: var(--avaria-bg); color: var(--avaria-text); }
+
+  /* COLABORADOR CARDS */
+  .cc { border: 1.5px solid var(--border); border-radius: var(--r); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; transition: all .12s; user-select: none; }
+  .cc:active, .cc:hover { background: var(--bg2); }
+  .cc.sel { border-color: var(--blue); background: var(--blue-bg); }
+  .avatar { border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; flex-shrink: 0; }
+  .cc-info { flex: 1; min-width: 0; }
+  .cc-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .cc-fn { font-size: 12px; color: var(--text2); margin-top: 2px; }
+  .cc-ct { margin-top: 5px; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+  .ct-tag { background: var(--blue-bg); color: var(--blue-text); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
+  .ct-troca { font-size: 11px; color: var(--blue); cursor: pointer; text-decoration: underline; }
+  .ct-dropdown { border: 0.5px solid var(--border2); border-radius: var(--r-sm); overflow: hidden; margin-top: 6px; }
+  .ct-opt { padding: 9px 14px; font-size: 13px; color: var(--text); cursor: pointer; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .ct-opt:last-child { border-bottom: none; }
+  .ct-opt:active { background: var(--bg2); }
+  .ct-opt.ctsel { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
+  .ct-check { color: var(--blue); font-weight: 700; }
+
+  /* POSTO PILLS */
+  .posto-pill { display: inline-block; padding: 6px 12px; border: 0.5px solid var(--border2); border-radius: 20px; font-size: 12px; color: var(--text2); cursor: pointer; margin: 3px; transition: all .1s; }
+  .posto-pill.sel { background: var(--blue); border-color: var(--blue); color: #fff; }
+
+  /* INFO ROWS */
+  .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+  .info-row:last-child { border-bottom: none; }
+  .info-lbl { color: var(--text2); flex-shrink: 0; margin-right: 8px; }
+  .info-val { color: var(--text); font-weight: 500; text-align: right; word-break: break-word; max-width: 65%; }
+
+  /* ADMIN */
+  .admin-row { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 0.5px solid var(--border); }
+  .admin-row:last-child { border-bottom: none; }
+  .del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 4px 6px; line-height: 1; flex-shrink: 0; }
+  .del-btn:hover, .del-btn:active { color: #c00; }
+
+  /* TABS */
+  .tab-bar { display: flex; border-bottom: 0.5px solid var(--border); margin-bottom: 14px; }
+  .tab { flex: 1; padding: 10px 8px; text-align: center; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2.5px solid transparent; transition: all .12s; }
+  .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
+
+  /* MISC */
+  .warn-box { background: var(--pend-bg); border-radius: var(--r-sm); padding: 11px 14px; margin-bottom: 12px; font-size: 13px; color: var(--pend-text); }
+  .err-msg { font-size: 13px; color: #c00; margin-bottom: 10px; display: none; }
+  .empty-state { text-align: center; padding: 32px 16px; color: var(--text2); font-size: 14px; }
+  .success-icon { font-size: 52px; text-align: center; margin: 32px 0 14px; }
+  .success-title { font-size: 20px; font-weight: 700; color: var(--text); text-align: center; margin-bottom: 6px; }
+  .success-sub { font-size: 14px; color: var(--text2); text-align: center; margin-bottom: 24px; }
+  .section-lbl { font-size: 12px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: .05em; margin: 16px 0 8px; }
+  .pend-warning { background: var(--avaria-bg); border-radius: var(--r-sm); padding: 10px 14px; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+// ═══════════════════════════════════════════════════════════
+// DADOS DOS EQUIPAMENTOS
+// ═══════════════════════════════════════════════════════════
+const EQ = [
+  {id:'eq1',nome:'Excentr 40-25',sub:'Limpadora orbital 230V',icon:'🔵',cor:'#E6F1FB',
+   itens:{
+    uso:[{t:'Carcaça (aço inox) sem trinca, amassado ou ferrugem',h:'Inspeção visual antes de ligar'},{t:'Cabo elétrico (15 m) íntegro — sem corte ou emenda',h:'Passar a mão ao longo do cabo'},{t:'Plugue sem pino dobrado ou oxidado',h:'Visual antes de conectar'},{t:'Deck encaixado e sem folga perceptível',h:'Tentar balançar o deck com a mão'},{t:'Pad presente, uniforme e preso no velcro',h:'Puxar levemente o pad'},{t:'Rodas traseiras giram livremente',h:'Girar cada roda com a mão'},{t:'Botão liga/desliga responde normalmente',h:'Acionar sem carga antes de usar'}],
+    guarda:[{t:'Pad retirado, lavado e seco',h:'Pad não fica montado durante guarda'},{t:'Deck limpo, sem resíduo de produto',h:'Passar pano úmido no deck'},{t:'Cabo enrolado sem dobras agudas',h:'Enrolar suavemente; evitar nós'},{t:'Máquina guardada em pé, local seco',h:'Verificar local de armazenamento'}],
+    transfer:[{t:'Cabo + deck + pad(s) presentes e contados',h:'Conferir contra lista padrão'},{t:'Nenhum dano novo não registrado',h:'Comparar com último checklist'},{t:'Pad em condição de uso (sem rasgo)',h:'Inspeção visual comparativa'},{t:'Reservatório presente e sem vazamento (se aplicável)',h:'Testar trava e base'}]}},
+  {id:'eq2',nome:'Haste I-Wash 8.05',sub:'Haste telescópica waterfed ~8 m',icon:'🟡',cor:'#FFFDE7',
+   itens:{
+    uso:[{t:'Todas as seções encaixadas e travadas',h:'Estender seção a seção e apertar cada colar'},{t:'Colares de trava não deslizam com pressão lateral',h:'Pressionar lateralmente após travar'},{t:'Mangueira interna sem kink permanente',h:'Inspecionar nas juntas visualmente'},{t:'Conector de ponta limpo e sem amassado',h:'Visual e girar o conector'},{t:'Marcadores visuais (amarelo/vermelho) visíveis',h:'Visual antes de estender'},{t:'Extensão não ultrapassa a marca máxima',h:'Checar marcação antes de usar em altura'}],
+    guarda:[{t:'Haste completamente retraída, colares frouxos',h:'Retrair todas as seções; afrouxar colares'},{t:'Sem pressão residual na mangueira interna',h:'Abrir conector; deixar fluir até zerar'},{t:'Seções secas externamente',h:'Passar pano seco nas seções'},{t:'Guardada na posição correta (horizontal ou suporte)',h:'Verificar local de guarda'}],
+    transfer:[{t:'Número correto de seções conferido',h:'Contar seções do modelo'},{t:'Adaptadores e conectores presentes',h:'Conferir contra kit padrão'},{t:'Nenhuma seção amassada ou colar danificado',h:'Inspecionar cada seção'},{t:'Mangueira interna sem kink permanente',h:'Estender e verificar ao longo do comprimento'}]}},
+  {id:'eq3',nome:'I-Suit (Sistema Janelas)',sub:'Sistema ergonômico waterfed backpack',icon:'🟢',cor:'#E8F5E9',
+   itens:{
+    uso:[{t:'Backpack íntegro — alças e fivelas funcionais',h:'Vestir e ajustar; testar cada fivela'},{t:'Lança encaixada firme, sem folga',h:'Tentar balançar após encaixar'},{t:'Mangueiras sem kink e conexões vedadas',h:'Inspecionar ao longo de todo o percurso'},{t:'Óculos de proteção presentes e sem trinca',h:'Visual nas lentes e nas hastes'},{t:'Sem vazamento ao pressurizar',h:'Pressurizar e checar juntas antes de subir'},{t:'Pressão estável na faixa operacional',h:'Testar em nível seguro antes de usar em altura'}],
+    guarda:[{t:'Sistema despressurizado antes de guardar',h:'Abrir válvula; aguardar pressão zerar'},{t:'Mangueiras soltas, sem dobra forçada',h:'Soltar; guardar estendidas'},{t:'Lança desmontada e guardada corretamente',h:'Guardar no slot ou bolsa designada'},{t:'Óculos no case específico',h:'Verificar antes de fechar o kit'}],
+    transfer:[{t:'Backpack + lança + mangueiras + óculos + conectores',h:'Conferir cada componente da lista'},{t:'Nenhuma mangueira com kink ou fissura',h:'Estender e inspecionar todo o percurso'},{t:'Alças e fivelas sem dano',h:'Testar fivelas; inspecionar costura'},{t:'Óculos sem trinca, haste sem fratura',h:'Visual detalhado'}]}},
+  {id:'eq4',nome:'DRYFT V1 S-Motion',sub:'Lavadora-secadora orbital cordless',icon:'🟠',cor:'#FFF3E0',
+   itens:{
+    uso:[{t:'Bateria CORE-ion encaixada com click e carga > 20%',h:'Encaixar e checar LED de carga'},{t:'Pad MAGPlate fixado sem desalinhamento',h:'Puxar levemente; deve resistir ao encaixe'},{t:'Squeegees sem rasgo ou dobra permanente',h:'Inspecionar toda a extensão'},{t:'Reservatório sem vazamento, tampa travada',h:'Apertar tampa e verificar parte inferior'},{t:'Joint ball com 360° de movimento livre',h:'Mover o cabeçote manualmente antes de ligar'},{t:'Chassi SPYDR responde ao ajuste de piso',h:'Pressionar levemente o cabeçote contra o piso'},{t:'Motor responde — sem erro de display',h:'Ligar e checar LEDs antes de operar'}],
+    guarda:[{t:'Reservatório esvaziado e seco',h:'Abrir tampa; inclinar até drenar'},{t:'Pad MAGPlate removido, lavado e seco',h:'Retirar; lavar na água corrente; secar'},{t:'Squeegees limpas, sem resíduo',h:'Passar pano úmido ao longo das borrachas'},{t:'Bateria carregada acima de 50%',h:'Se guarda longa: retirar a bateria'}],
+    transfer:[{t:'Máquina + bateria + carregador + pad + squeegees',h:'Conferir contra lista padrão'},{t:'Chassi sem trinca não registrada',h:'Inspeção visual completa'},{t:'Joint ball íntegro com movimento livre',h:'Movimentar nos 360°'},{t:'Squeegees em condição de uso',h:'Deformação = trocar antes de repassar'},{t:'Bateria CORE-ion original (não genérica)',h:'Confirmar modelo gravado na bateria'}]}},
+  {id:'eq5',nome:'Unger HydroPower Filter',sub:'Filtro DI água pura (nLite)',icon:'🔷',cor:'#E3F2FD',
+   itens:{
+    uso:[{t:'TDS meter lendo ABAIXO de 10 ppm',h:'Ligar e checar com água correndo por 30 s'},{t:'Resina em nível adequado, coloração normal (âmbar)',h:'Inspecionar pela janela do filtro'},{t:'Filtro na posição VERTICAL',h:'Verificar suporte antes de pressurizar'},{t:'Tampa com trava firme e anel vedante presente',h:'Apertar e confirmar click; checar anel'},{t:'Conectores firmes, sem oxidação',h:'Apertar manualmente; inspecionar'},{t:'Mangueira de alimentação sem kink',h:'Inspecionar antes de pressurizar'},{t:'Válvula de fechamento abre e fecha suavemente',h:'Acionar antes de conectar ao polo'}],
+    guarda:[{t:'Alimentação fechada, sistema sem pressão residual',h:'Fechar válvula; testar esguicho'},{t:'Leitura de TDS registrada nas observações',h:'Anotar o valor antes de guardar'},{t:'Conectores protegidos contra poeira/umidade',h:'Colocar tampas nos conectores'},{t:'Guardado longe de geada ou sol direto',h:'Verificar local de armazenamento'}],
+    transfer:[{t:'TDS da última operação registrado (< 10 ppm)',h:'Checar campo de observação'},{t:'Nível de resina documentado',h:'Verificar ficha de manutenção'},{t:'TDS meter presente e funcionando',h:'Ligar e checar display'},{t:'Mangueiras + conectores + tampas presentes',h:'Conferir contra kit padrão'},{t:'Filtro íntegro — sem trinca no corpo',h:'Inspecionar externamente'}]}},
+  {id:'eq6',nome:'Varredeira Makita VS001GZ',sub:'Varredeira Brushless HEPA 40V XGT',icon:'⚫',cor:'#EFEBE9',
+   itens:{
+    uso:[{t:'Bateria XGT 40V encaixada com click e carga > 20%',h:'Encaixar e checar LED antes de ligar'},{t:'Escova principal — fibras ok, encaixe firme',h:'Puxar levemente; observar fibras'},{t:'Escova lateral presente, fixação sem folga',h:'Balançar levemente a escova lateral'},{t:'Filtro HEPA sem rasgo, pré-filtro no lugar',h:'Retirar, inspecionar, recolocar'},{t:'Hopper vazio ou abaixo de 2/3',h:'Abrir compartimento e verificar nível'},{t:'Dial de altura ajustado para o tipo de piso',h:'Verificar posição do dial antes de ligar'},{t:'Máquina liga e modo Standard/Quiet responde',h:'Acionar em local aberto antes de operar'}],
+    guarda:[{t:'Hopper esvaziado, sem resíduo úmido',h:'Abrir; descartar; passar pano se necessário'},{t:'Escovas limpas — sem fios ou detritos no eixo',h:'Retirar escovas e inspecionar o eixo'},{t:'Filtro HEPA limpo (acionar autolimpeza)',h:'Apertar botão de vibração por 10 s'},{t:'Guardada em posição vertical, local seco',h:'Verificar local e posição'}],
+    transfer:[{t:'Bateria(s) XGT 40V presentes — modelo confirmado',h:'Checar gravação; não aceitar outra linha'},{t:'Escova principal e lateral em bom estado',h:'Inspeção visual comparativa'},{t:'Filtro HEPA íntegro — sem rasgo',h:'Retirar e inspecionar antes de transferir'},{t:'Hopper limpo e sem dano',h:'Abrir e inspecionar internamente'},{t:'Carregador XGT presente (se kit inclui)',h:'Conferir contra lista padrão'}]}}
+];
+
+const TL = {uso:'Uso diário', guarda:'Guarda', transfer:'Transferência'};
+const TI = {uso:'🔧', guarda:'📦', transfer:'🔁'};
+const TCLS = {uso:'sb-uso', guarda:'sb-guarda', transfer:'sb-transfer'};
+const ADMIN_PASS = 'Demax@2025';
+const POSTOS = ['UBS Centro','UBS Norte','UBS Sul','Terminal Rodoviário','Paço Municipal','Mercado Municipal','Parque Central'];
+const AVC = ['#E6F1FB','#E8F5E9','#FFF3E0','#FAECE7','#F3E5F5','#E0F7FA','#FFF8E1'];
+const ATC = ['#0C447C','#27500A','#633806','#4A1B0C','#4A148C','#006064','#F57F17'];
+const av = n => { const p = n.trim().split(' '); return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase(); };
+const avc = n => { let h=0; for(let c of n) h=((h<<5)-h)+c.charCodeAt(0); return AVC[Math.abs(h)%AVC.length]; };
+const atc = n => { let h=0; for(let c of n) h=((h<<5)-h)+c.charCodeAt(0); return ATC[Math.abs(h)%ATC.length]; };
+const uid = () => 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const bcls = s => s==='ok'?'b-ok':s==='pendencia'?'b-pend':s==='avaria'?'b-avaria':'b-novo';
+const blbl = s => s==='ok'?'OK':s==='pendencia'?'Pendência':s==='avaria'?'Avaria':'Sem registro';
+const fdt = iso => { if(!iso) return '—'; const d=new Date(iso); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); };
+
+// ═══════════════════════════════════════════════════════════
+// STORAGE (localStorage)
+// ═══════════════════════════════════════════════════════════
+const db = {
+  g: k => { try { const v=localStorage.getItem(k); return v?JSON.parse(v):null; } catch { return null; } },
+  s: (k,v) => { try { localStorage.setItem(k,JSON.stringify(v)); } catch {} }
+};
+const getCollabs = () => db.g('dm_collabs') || [];
+const setCollabs = a => db.s('dm_collabs', a);
+const getContratos = () => db.g('dm_contratos') || [];
+const setContratos = a => db.s('dm_contratos', a);
+const getLastRec = (eqId,tipo) => { const a=db.g('dm_r_'+eqId+'_'+tipo)||[]; return a.length?a[a.length-1]:null; };
+const pushRec = (eqId,tipo,rec) => { const k='dm_r_'+eqId+'_'+tipo; const a=db.g(k)||[]; a.push(rec); if(a.length>60) a.splice(0,a.length-60); db.s(k,a); };
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let S = { scr:'home', eq:null, tipo:null, chks:{}, colab:null, ctAtual:null, showCtSel:false, cond:'', obs:'', posto:'', adminTab:'collabs' };
+const go = patch => { Object.assign(S, patch); render(); };
+
+// ═══════════════════════════════════════════════════════════
+// RENDER DISPATCHER
+// ═══════════════════════════════════════════════════════════
+function render() {
+  const app = document.getElementById('app');
+  const m = { home:scrHome, equip:scrEquip, selcolab:scrSelColab, checklist:scrChecklist, confirm:scrConfirm, success:scrSuccess, alog:scrAdminLogin, admin:scrAdmin, adm_nc:scrAdmNewCollab, adm_nct:scrAdmNewContract };
+  if(m[S.scr]) m[S.scr](app);
+}
+
+// ═══════════════════════════════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════════════════════════════
+function scrHome(app) {
+  const collabs=getCollabs(), contratos=getContratos();
+  const noSetup = !collabs.length || !contratos.length;
+  let rows = '';
+  for(const eq of EQ) {
+    let st='novo';
+    for(const t of['uso','guarda','transfer']) { const r=getLastRec(eq.id,t); if(r){if(r.cond==='avaria'){st='avaria';break}if(r.cond==='pendencia')st='pendencia';else if(st==='novo')st='ok';}}
+    rows += `<div class="list-item" onclick="go({scr:'equip',eq:'${eq.id}'})">
+      <div class="eq-icon" style="background:${eq.cor}">${eq.icon}</div>
+      <div class="item-info"><div class="item-name">${eq.nome}</div><div class="item-sub">${eq.sub}</div></div>
+      <span class="badge ${bcls(st)}">${blbl(st)}</span>
+    </div>`;
+  }
+  app.innerHTML = `
+    <div class="topbar"><h1>Checklist Equipamentos</h1><button class="admin-btn" onclick="go({scr:'alog'})">Admin</button></div>
+    <div class="screen">
+      ${noSetup?`<div class="warn-box"><strong>Configuração pendente:</strong> acesse o Admin para cadastrar ${!contratos.length?'contratos':''}${!contratos.length&&!collabs.length?' e ':''}${!collabs.length?'colaboradores':''}.</div>`:''}
+      <p class="section-lbl">Equipamentos</p>
+      <div class="card">${rows}</div>
+      <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Demax · Gestão de Contratos · v1.0</p>
+    </div>`;
+}
+
+function scrEquip(app) {
+  const eq = EQ.find(e=>e.id===S.eq);
+  let lastHtml = '';
+  for(const tipo of['uso','guarda','transfer']) {
+    const r = getLastRec(eq.id, tipo);
+    if(!r) { lastHtml+=`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:0.5px solid var(--border);font-size:13px"><span>${TI[tipo]} ${TL[tipo]}</span><span class="badge b-novo">Sem registro</span></div>`; continue; }
+    const total=eq.itens[tipo].length, cnt=r.chks?Object.values(r.chks).filter(Boolean).length:0, pendN=total-cnt;
+    lastHtml += `<div style="padding:9px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">
+        <span style="font-size:13px;font-weight:600">${TI[tipo]} ${TL[tipo]}</span>
+        <span class="badge ${bcls(r.cond)}">${blbl(r.cond)}</span>
+      </div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.7">
+        <strong style="color:var(--text)">${r.colab||'—'}</strong> · ${r.fn||'—'}<br>
+        <span class="badge b-ct">${r.ct||'—'}</span><br>
+        ${fdt(r.data)} · ${r.posto||'—'}<br>
+        ${cnt}/${total} itens verificados${pendN>0&&r.cond!=='ok'?` · <span style="color:#c00">${pendN} não marcado(s)</span>`:''}
+      </div>
+      ${r.obs?`<div style="font-size:12px;color:var(--text2);background:var(--bg2);padding:7px 10px;border-radius:6px;margin-top:6px">${r.obs}</div>`:''}
+    </div>`;
+  }
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'home'})">←</button><h1>${eq.nome}</h1></div>
+    <div class="screen">
+      <p class="section-lbl">Último registro</p>
+      <div class="card"><div class="card-body" style="padding:4px 14px 10px">${lastHtml}</div></div>
+      <p class="section-lbl">Nova inspeção</p>
+      <div class="card">
+        ${['uso','guarda','transfer'].map(t=>`<div class="list-item" onclick="go({scr:'selcolab',tipo:'${t}',chks:{},colab:null,ctAtual:null,showCtSel:false,cond:'',obs:'',posto:''})">
+          <div class="eq-icon" style="background:${t==='uso'?'#E6F1FB':t==='guarda'?'#FEF3E2':'#E8F5E9'}">${TI[t]}</div>
+          <div class="item-info"><div class="item-name">${TL[t]}</div></div>
+          <span class="chevron">›</span>
+        </div>`).join('')}
+      </div>
+    </div>`;
+}
+
+function scrSelColab(app) {
+  const collabs=getCollabs(), contratos=getContratos();
+  if(!collabs.length||!contratos.length) {
+    app.innerHTML=`<div class="topbar"><button class="back-btn" onclick="go({scr:'equip'})">←</button><h1>Identificação</h1></div>
+    <div class="screen"><div class="warn-box">Configure contratos e colaboradores no Admin antes de usar.</div>
+    <button class="btn btn-s" onclick="go({scr:'alog'})">Ir para Admin</button></div>`;
+    return;
+  }
+  const colabHtml = collabs.map(c => {
+    const sel = S.colab && S.colab.id === c.id;
+    const ctPadrao = contratos.find(t=>t.id===c.ctId);
+    const ctEf = sel && S.ctAtual ? S.ctAtual : ctPadrao;
+    return `<div class="cc ${sel?'sel':''}" onclick="selColab('${c.id}')">
+      <div class="avatar" style="width:42px;height:42px;font-size:14px;background:${avc(c.nome)};color:${atc(c.nome)}">${av(c.nome)}</div>
+      <div class="cc-info">
+        <div class="cc-name">${c.nome}</div>
+        <div class="cc-fn">${c.fn||'Colaborador'}</div>
+        <div class="cc-ct">
+          <span class="ct-tag">${ctEf?ctEf.cod+' · '+ctEf.nome:'Sem contrato'}</span>
+          ${sel?`<span class="ct-troca" onclick="event.stopPropagation();toggleCtSel()">trocar</span>`:''}
+        </div>
+        ${sel&&S.showCtSel?`<div class="ct-dropdown">${contratos.map(t=>{const isEf=S.ctAtual?S.ctAtual.id===t.id:(ctPadrao&&ctPadrao.id===t.id);return`<div class="ct-opt ${isEf?'ctsel':''}" onclick="event.stopPropagation();pickCt('${t.id}')">${t.cod} · ${t.nome}${ctPadrao&&ctPadrao.id===t.id?' <span style="font-size:11px;opacity:.6">(padrão)</span>':''} ${isEf?'<span class="ct-check">✓</span>':''}</div>`;}).join('')}</div>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const postoHtml = POSTOS.map(p=>`<span class="posto-pill ${S.posto===p?'sel':''}" onclick="selPosto('${p}')">${p}</span>`).join('');
+
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'equip'})">←</button><h1>${TI[S.tipo]} ${TL[S.tipo]}</h1></div>
+    <div class="screen">
+      <div class="field">
+        <label>Quem está realizando esta inspeção? *</label>
+        ${colabHtml}
+      </div>
+      <div class="field">
+        <label>Posto / Local *</label>
+        <div style="margin-bottom:8px">${postoHtml}</div>
+        <input type="text" id="ip_posto" placeholder="Ou digite o local..." value="${!POSTOS.includes(S.posto)?S.posto:''}" oninput="S.posto=this.value.trim();updBtn()">
+      </div>
+      <button class="btn btn-p" id="btn_cont" onclick="go({scr:'checklist'})" ${S.colab&&S.posto?'':'disabled'}>Continuar →</button>
+    </div>`;
+}
+
+function selColab(id) {
+  S.colab = getCollabs().find(c=>c.id===id)||null;
+  S.ctAtual = null; S.showCtSel = false;
+  render();
+}
+function toggleCtSel() { S.showCtSel = !S.showCtSel; render(); }
+function pickCt(id) { S.ctAtual = getContratos().find(t=>t.id===id)||null; S.showCtSel=false; render(); }
+function selPosto(p) { S.posto=p; const ip=document.getElementById('ip_posto'); if(ip)ip.value=''; render(); }
+function updBtn() { const b=document.getElementById('btn_cont'); if(b) b.disabled=!(S.colab&&S.posto.trim()); }
+
+function scrChecklist(app) {
+  const eq = EQ.find(e=>e.id===S.eq);
+  const itens = eq.itens[S.tipo];
+  const cnt = Object.values(S.chks).filter(Boolean).length;
+  const pct = Math.round(cnt/itens.length*100);
+  const ctEf = S.ctAtual || (getContratos().find(t=>t.id===S.colab?.ctId));
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'selcolab'})">←</button><h1>${eq.nome}</h1></div>
+    <div class="screen">
+      <div class="sec-banner ${TCLS[S.tipo]}">
+        <span style="font-size:16px">${TI[S.tipo]}</span>
+        <span class="sbl" style="font-size:13px;font-weight:600">${TL[S.tipo]}</span>
+        <span class="sbl" style="font-size:12px;margin-left:auto;opacity:.8">${S.colab?S.colab.nome:''} ${ctEf?'· '+ctEf.cod:''}</span>
+      </div>
+      <div>
+        <div class="prog-bar"><div class="prog-fill" id="pbar" style="width:${pct}%"></div></div>
+        <div class="prog-txt" id="ptxt">${cnt} de ${itens.length} itens verificados</div>
+      </div>
+      <div class="card" style="margin-top:10px"><div class="card-body">
+        ${itens.map((item,i)=>`<div class="check-item">
+          <div class="chkbox ${S.chks[i]?'on':''}" onclick="tgl(${i})"></div>
+          <div style="flex:1"><div class="ck-title">${item.t}</div><div class="ck-how">${item.h}</div></div>
+        </div>`).join('')}
+      </div></div>
+      <button class="btn btn-p" style="margin-top:4px" onclick="go({scr:'confirm'})">Registrar resultado →</button>
+      <button class="btn btn-s" onclick="go({scr:'equip'})">Cancelar</button>
+    </div>`;
+}
+
+function tgl(i) {
+  S.chks[i] = !S.chks[i];
+  const b = document.querySelectorAll('.chkbox')[i];
+  if(b) b.className='chkbox'+(S.chks[i]?' on':'');
+  const eq=EQ.find(e=>e.id===S.eq), tot=eq.itens[S.tipo].length;
+  const cnt=Object.values(S.chks).filter(Boolean).length;
+  const pb=document.getElementById('pbar'), pt=document.getElementById('ptxt');
+  if(pb) pb.style.width=Math.round(cnt/tot*100)+'%';
+  if(pt) pt.textContent=cnt+' de '+tot+' itens verificados';
+}
+
+function scrConfirm(app) {
+  const eq=EQ.find(e=>e.id===S.eq), itens=eq.itens[S.tipo];
+  const pend=itens.filter((_,i)=>!S.chks[i]), cnt=itens.length-pend.length;
+  const ctEf=S.ctAtual||(getContratos().find(t=>t.id===S.colab?.ctId));
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'checklist'})">←</button><h1>Registrar resultado</h1></div>
+    <div class="screen">
+      <div class="card"><div class="card-body">
+        <div class="info-row"><span class="info-lbl">Equipamento</span><span class="info-val">${eq.nome}</span></div>
+        <div class="info-row"><span class="info-lbl">Tipo</span><span class="info-val">${TI[S.tipo]} ${TL[S.tipo]}</span></div>
+        <div class="info-row"><span class="info-lbl">Colaborador</span><span class="info-val">${S.colab?.nome||'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Função</span><span class="info-val">${S.colab?.fn||'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Contrato</span><span class="info-val">${ctEf?ctEf.cod+' · '+ctEf.nome:'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Posto</span><span class="info-val">${S.posto}</span></div>
+        <div class="info-row"><span class="info-lbl">Itens verificados</span><span class="info-val">${cnt} de ${itens.length}</span></div>
+      </div></div>
+      ${pend.length?`<div class="pend-warning"><div style="font-size:13px;font-weight:600;color:var(--avaria-text);margin-bottom:6px">${pend.length} item(ns) não verificado(s):</div>${pend.map(it=>`<div style="font-size:12px;color:var(--avaria-text);margin-bottom:2px">· ${it.t}</div>`).join('')}</div>`:''}
+      <div class="card"><div class="card-body">
+        <div class="field"><label>Condição geral do equipamento *</label>
+          <div class="cond-g">
+            <div class="copt ${S.cond==='ok'?'cok':''}" onclick="setCond('ok')">OK</div>
+            <div class="copt ${S.cond==='pendencia'?'cpend':''}" onclick="setCond('pendencia')">Pendência</div>
+            <div class="copt ${S.cond==='avaria'?'cavaria':''}" onclick="setCond('avaria')">Avaria</div>
+          </div>
+        </div>
+        <div class="field"><label>Observações / Pendências</label>
+          <textarea id="ip_obs" placeholder="Descreva qualquer problema, peça ausente ou pendência identificada...">${S.obs}</textarea>
+        </div>
+        <button class="btn btn-p" id="btn_salv" onclick="salvar()" ${S.cond?'':'disabled'}>Confirmar e salvar registro</button>
+        <button class="btn btn-s" onclick="go({scr:'checklist'})">Voltar ao checklist</button>
+      </div></div>
+    </div>`;
+}
+
+function setCond(v) {
+  S.cond=v;
+  document.querySelectorAll('.copt').forEach(el=>{
+    el.className='copt';
+    const l=el.textContent.trim();
+    if((l==='OK'&&v==='ok')||(l==='Pendência'&&v==='pendencia')||(l==='Avaria'&&v==='avaria'))
+      el.classList.add(v==='ok'?'cok':v==='pendencia'?'cpend':'cavaria');
+  });
+  const b=document.getElementById('btn_salv'); if(b) b.disabled=false;
+}
+
+function salvar() {
+  const obsEl=document.getElementById('ip_obs'); if(obsEl) S.obs=obsEl.value.trim();
+  const eq=EQ.find(e=>e.id===S.eq);
+  const ctEf=S.ctAtual||(getContratos().find(t=>t.id===S.colab?.ctId));
+  pushRec(S.eq, S.tipo, {
+    data:new Date().toISOString(),
+    colab:S.colab?.nome||'', fn:S.colab?.fn||'',
+    ct:ctEf?ctEf.cod+' · '+ctEf.nome:'',
+    posto:S.posto, cond:S.cond, obs:S.obs,
+    chks:{...S.chks},
+    total:eq.itens[S.tipo].length,
+    cnt:Object.values(S.chks).filter(Boolean).length
+  });
+  go({scr:'success'});
+}
+
+function scrSuccess(app) {
+  const eq=EQ.find(e=>e.id===S.eq);
+  const ctEf=S.ctAtual||(getContratos().find(t=>t.id===S.colab?.ctId));
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'home'})">←</button><h1>Registro salvo</h1></div>
+    <div class="screen">
+      <div class="success-icon">✅</div>
+      <div class="success-title">Inspeção registrada</div>
+      <div class="success-sub">${TI[S.tipo]} ${TL[S.tipo]} · ${eq.nome}</div>
+      <div class="card"><div class="card-body">
+        <div class="info-row"><span class="info-lbl">Colaborador</span><span class="info-val">${S.colab?.nome||'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Função</span><span class="info-val">${S.colab?.fn||'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Contrato</span><span class="info-val">${ctEf?ctEf.cod+' · '+ctEf.nome:'—'}</span></div>
+        <div class="info-row"><span class="info-lbl">Posto</span><span class="info-val">${S.posto}</span></div>
+        <div class="info-row"><span class="info-lbl">Data/hora</span><span class="info-val">${fdt(new Date().toISOString())}</span></div>
+        <div class="info-row"><span class="info-lbl">Condição</span><span class="info-val"><span class="badge ${bcls(S.cond)}">${blbl(S.cond)}</span></span></div>
+        ${S.obs?`<div class="info-row"><span class="info-lbl">Obs.</span><span class="info-val">${S.obs}</span></div>`:''}
+      </div></div>
+      <button class="btn btn-p" style="margin-top:4px" onclick="go({scr:'equip',chks:{},colab:null,ctAtual:null,cond:'',obs:'',posto:''})">Voltar ao equipamento</button>
+      <button class="btn btn-s" onclick="go({scr:'home',chks:{},colab:null,ctAtual:null,cond:'',obs:'',posto:''})">Tela inicial</button>
+    </div>`;
+}
+
+// ── ADMIN ──
+function scrAdminLogin(app) {
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'home'})">←</button><h1>Painel Admin</h1></div>
+    <div class="screen" style="max-width:360px;margin:0 auto">
+      <div style="text-align:center;padding:28px 0 20px">
+        <div style="font-size:40px;margin-bottom:10px">🔒</div>
+        <div style="font-size:16px;font-weight:700;margin-bottom:4px">Acesso restrito</div>
+        <div style="font-size:13px;color:var(--text2)">Somente supervisores e coordenação</div>
+      </div>
+      <div class="field"><label>Senha</label>
+        <input type="password" id="ip_pass" placeholder="Senha admin" onkeydown="if(event.key==='Enter')chkPass()">
+      </div>
+      <div id="pass_err" class="err-msg">Senha incorreta. Tente novamente.</div>
+      <button class="btn btn-p" onclick="chkPass()">Entrar</button>
+      <button class="btn btn-s" onclick="go({scr:'home'})">Cancelar</button>
+    </div>`;
+}
+function chkPass() {
+  const v=document.getElementById('ip_pass');
+  if(v&&v.value===ADMIN_PASS) { go({scr:'admin',adminTab:'collabs'}); }
+  else { const e=document.getElementById('pass_err'); if(e) e.style.display='block'; if(v) v.value=''; }
+}
+
+function scrAdmin(app) {
+  const collabs=getCollabs(), contratos=getContratos();
+  const collabsHtml = collabs.length ? collabs.map(c=>{
+    const ct=contratos.find(t=>t.id===c.ctId);
+    return `<div class="admin-row">
+      <div class="avatar" style="width:36px;height:36px;font-size:13px;background:${avc(c.nome)};color:${atc(c.nome)}">${av(c.nome)}</div>
+      <div class="item-info">
+        <div class="item-name">${c.nome}</div>
+        <div class="item-sub">${c.fn||'—'} · <span style="color:var(--blue-text,#185FA5)">${ct?ct.cod+' · '+ct.nome:'Sem contrato'}</span></div>
+      </div>
+      <button class="del-btn" onclick="delColab('${c.id}')">✕</button>
+    </div>`;}).join('') : '<div class="empty-state">Nenhum colaborador cadastrado.</div>';
+
+  const contratosHtml = contratos.length ? contratos.map(t=>`<div class="admin-row">
+    <div class="item-info">
+      <div class="item-name">${t.cod} · ${t.nome}</div>
+      <div class="item-sub">${t.municipio||'Município não informado'}</div>
+    </div>
+    <button class="del-btn" onclick="delContrato('${t.id}')">✕</button>
+  </div>`).join('') : '<div class="empty-state">Nenhum contrato cadastrado.</div>';
+
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'home'})">←</button><h1>Painel Admin</h1></div>
+    <div class="screen">
+      <div class="tab-bar">
+        <div class="tab ${S.adminTab==='collabs'?'active':''}" onclick="go({adminTab:'collabs'})">Colaboradores (${collabs.length})</div>
+        <div class="tab ${S.adminTab==='contratos'?'active':''}" onclick="go({adminTab:'contratos'})">Contratos (${contratos.length})</div>
+      </div>
+      ${S.adminTab==='collabs'?`
+        <div class="card">${collabsHtml}</div>
+        <button class="btn btn-p" onclick="go({scr:'adm_nc'})">+ Novo colaborador</button>
+      `:`
+        <div class="card">${contratosHtml}</div>
+        <button class="btn btn-p" onclick="go({scr:'adm_nct'})">+ Novo contrato</button>
+      `}
+      <button class="btn btn-s" onclick="go({scr:'home'})">Sair do Admin</button>
+    </div>`;
+}
+
+function scrAdmNewCollab(app) {
+  const contratos=getContratos();
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'admin'})">←</button><h1>Novo Colaborador</h1></div>
+    <div class="screen">
+      <div class="card"><div class="card-body">
+        <div class="field"><label>Nome completo *</label><input type="text" id="ip_cn" placeholder="Ex: João da Silva"></div>
+        <div class="field"><label>Função *</label>
+          <select id="ip_cf">
+            <option value="">Selecionar função...</option>
+            <option>Auxiliar de Limpeza</option>
+            <option>Operador de Equipamento</option>
+            <option>Encarregado</option>
+            <option>Supervisor</option>
+            <option>Técnico de Manutenção</option>
+          </select>
+        </div>
+        <div class="field"><label>Contrato padrão *</label>
+          <select id="ip_cct">
+            <option value="">Selecionar contrato...</option>
+            ${contratos.map(t=>`<option value="${t.id}">${t.cod} · ${t.nome}</option>`).join('')}
+          </select>
+          ${!contratos.length?`<div style="font-size:12px;color:var(--pend-text);margin-top:5px">Cadastre pelo menos um contrato primeiro.</div>`:''}
+        </div>
+        <div id="adm_err" class="err-msg"></div>
+        <button class="btn btn-p" onclick="addColab()">Salvar colaborador</button>
+        <button class="btn btn-s" onclick="go({scr:'admin',adminTab:'collabs'})">Cancelar</button>
+      </div></div>
+    </div>`;
+}
+function addColab() {
+  const nome=document.getElementById('ip_cn').value.trim();
+  const fn=document.getElementById('ip_cf').value;
+  const ctId=document.getElementById('ip_cct').value;
+  const err=document.getElementById('adm_err');
+  if(!nome||!fn||!ctId){if(err){err.style.display='block';err.textContent='Preencha todos os campos.';}return;}
+  const a=getCollabs(); a.push({id:uid(),nome,fn,ctId}); setCollabs(a);
+  go({scr:'admin',adminTab:'collabs'});
+}
+function delColab(id) { const a=getCollabs().filter(c=>c.id!==id); setCollabs(a); go({scr:'admin',adminTab:'collabs'}); }
+
+function scrAdmNewContract(app) {
+  app.innerHTML = `
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'admin',adminTab:'contratos'})">←</button><h1>Novo Contrato</h1></div>
+    <div class="screen">
+      <div class="card"><div class="card-body">
+        <div class="field"><label>Código interno *</label><input type="text" id="ip_tc" placeholder="Ex: CT-001"></div>
+        <div class="field"><label>Nome do contrato *</label><input type="text" id="ip_tn" placeholder="Ex: Limpeza Predial Araras"></div>
+        <div class="field"><label>Município</label><input type="text" id="ip_tm" placeholder="Ex: Araras, SP"></div>
+        <div id="ct_err" class="err-msg"></div>
+        <button class="btn btn-p" onclick="addContrato()">Salvar contrato</button>
+        <button class="btn btn-s" onclick="go({scr:'admin',adminTab:'contratos'})">Cancelar</button>
+      </div></div>
+    </div>`;
+}
+function addContrato() {
+  const cod=document.getElementById('ip_tc').value.trim();
+  const nome=document.getElementById('ip_tn').value.trim();
+  const municipio=document.getElementById('ip_tm').value.trim();
+  const err=document.getElementById('ct_err');
+  if(!cod||!nome){if(err){err.style.display='block';err.textContent='Código e nome são obrigatórios.';}return;}
+  const a=getContratos(); a.push({id:uid(),cod,nome,municipio}); setContratos(a);
+  go({scr:'admin',adminTab:'contratos'});
+}
+function delContrato(id) { const a=getContratos().filter(t=>t.id!==id); setContratos(a); go({scr:'admin',adminTab:'contratos'}); }
+
+// INIT
+render();
+</script>
+</body>
+</html>
