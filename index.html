@@ -369,14 +369,17 @@ function scrSelColab(app) {
         <div style="margin-bottom:8px">${postoHtml}</div>
         <input type="text" id="ip_posto" placeholder="Ou digite o local..." value="${!POSTOS.includes(S.posto)?S.posto:''}" oninput="S.posto=this.value.trim();updBtn()">
       </div>
-      <button class="btn btn-p" id="btn_cont" onclick="go({scr:'checklist'})" ${S.colab&&S.posto?'':'disabled'}>Continuar →</button>
+      <button class="btn btn-p" id="btn_cont" onclick="go({scr:'checklist'})" disabled>Continuar →</button>
     </div>`;
+  setTimeout(updBtn, 0);
 }
  
 function selColab(id) {
   S.colab = getCollabs().find(c=>c.id===id)||null;
   S.ctAtual = null; S.showCtSel = false;
   render();
+  // after render, update button state
+  setTimeout(updBtn, 0);
 }
 function toggleCtSel() { S.showCtSel = !S.showCtSel; render(); }
 function pickCt(id) { S.ctAtual = getContratos().find(t=>t.id===id)||null; S.showCtSel=false; render(); }
@@ -384,17 +387,21 @@ function selPosto(p) {
   S.posto = p;
   const ip = document.getElementById('ip_posto');
   if(ip) ip.value = '';
-  updBtn();
-  // re-render only the pills to avoid losing focus
   document.querySelectorAll('.posto-pill').forEach(el => {
     el.classList.toggle('sel', el.textContent.trim() === p);
   });
+  updBtn();
 }
 function updBtn() {
   const ip = document.getElementById('ip_posto');
-  if(ip && ip.value.trim()) S.posto = ip.value.trim();
+  if(ip && ip.value.trim()) {
+    S.posto = ip.value.trim();
+    // deselect pills when typing
+    document.querySelectorAll('.posto-pill').forEach(el => el.classList.remove('sel'));
+  }
+  const ok = !!(S.colab && S.posto && S.posto.trim().length > 0);
   const b = document.getElementById('btn_cont');
-  if(b) b.disabled = !(S.colab && S.posto.trim());
+  if(b) b.disabled = !ok;
 }
  
 function scrChecklist(app) {
