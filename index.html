@@ -40,20 +40,20 @@
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg2); color: var(--text); font-size: 16px; }
   .app { max-width: 520px; margin: 0 auto; min-height: 100vh; background: var(--bg2); padding-bottom: 40px; }
-
+ 
   /* TOPBAR */
   .topbar { background: var(--bg); border-bottom: 0.5px solid var(--border); padding: 13px 16px; display: flex; align-items: center; gap: 10px; position: sticky; top: 0; z-index: 100; }
   .topbar h1 { font-size: 15px; font-weight: 600; color: var(--text); flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .back-btn { background: none; border: none; cursor: pointer; padding: 4px 6px; color: var(--text2); font-size: 22px; line-height: 1; flex-shrink: 0; }
   .admin-btn { background: none; border: 0.5px solid var(--border2); border-radius: var(--r-sm); padding: 5px 11px; font-size: 12px; color: var(--text2); cursor: pointer; font-family: inherit; flex-shrink: 0; }
-
+ 
   /* SCREEN */
   .screen { padding: 14px 16px; }
-
+ 
   /* CARDS */
   .card { background: var(--bg); border: 0.5px solid var(--border); border-radius: var(--r); margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow); }
   .card-body { padding: 14px 16px; }
-
+ 
   /* LIST ITEMS */
   .list-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 0.5px solid var(--border); transition: background .1s; user-select: none; }
   .list-item:last-child { border-bottom: none; }
@@ -63,7 +63,7 @@
   .item-name { font-size: 14px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .item-sub { font-size: 12px; color: var(--text2); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chevron { color: var(--text3); font-size: 18px; flex-shrink: 0; }
-
+ 
   /* BADGES */
   .badge { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 20px; flex-shrink: 0; white-space: nowrap; }
   .b-ok { background: var(--ok-bg); color: var(--ok-text); }
@@ -71,7 +71,7 @@
   .b-avaria { background: var(--avaria-bg); color: var(--avaria-text); }
   .b-novo { background: var(--novo-bg); color: var(--novo-text); }
   .b-ct { background: var(--blue-bg); color: var(--blue-text); font-size: 10px; padding: 2px 7px; }
-
+ 
   /* CHECKLIST ITEMS */
   .check-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 0; border-bottom: 0.5px solid var(--border); }
   .check-item:last-child { border-bottom: none; }
@@ -80,18 +80,18 @@
   .chkbox.on::after { content: '✓'; color: #fff; font-size: 14px; font-weight: 700; }
   .ck-title { font-size: 14px; color: var(--text); line-height: 1.45; }
   .ck-how { font-size: 12px; color: var(--text2); margin-top: 3px; line-height: 1.4; }
-
+ 
   /* SECTION BANNERS */
   .sec-banner { display: flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: var(--r-sm); margin: 10px 0 6px; }
   .sb-uso { background: #E6F1FB; } .sb-uso .sbl { color: #0C447C; }
   .sb-guarda { background: #FEF3E2; } .sb-guarda .sbl { color: #633806; }
   .sb-transfer { background: #E8F5E9; } .sb-transfer .sbl { color: #27500A; }
-
+ 
   /* PROGRESS */
   .prog-bar { height: 4px; background: var(--bg3); border-radius: 2px; margin: 6px 0 3px; overflow: hidden; }
   .prog-fill { height: 100%; background: var(--blue); border-radius: 2px; transition: width .25s; }
   .prog-txt { font-size: 12px; color: var(--text2); }
-
+ 
   /* FORMS */
   label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 5px; }
   input[type=text], input[type=password], textarea, select {
@@ -103,7 +103,7 @@
   input:focus, textarea:focus, select:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(24,95,165,.15); }
   textarea { min-height: 80px; resize: vertical; }
   .field { margin-bottom: 14px; }
-
+ 
   /* BUTTONS */
   .btn { width: 100%; padding: 13px; border: none; border-radius: var(--r-sm); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .12s, transform .08s; -webkit-tap-highlight-color: transparent; }
   .btn:active { transform: scale(0.98); }
@@ -112,14 +112,14 @@
   .btn-p:disabled { opacity: .35; cursor: default; transform: none; }
   .btn-s { background: none; border: 0.5px solid var(--border2); color: var(--text); margin-top: 8px; }
   .btn-s:hover { background: var(--bg2); }
-
+ 
   /* CONDITION SELECTOR */
   .cond-g { display: flex; gap: 8px; }
   .copt { flex: 1; padding: 10px 6px; border: 2px solid var(--border); border-radius: var(--r-sm); cursor: pointer; text-align: center; font-size: 13px; font-weight: 500; color: var(--text2); transition: all .12s; }
   .cok { border-color: #0F6E56; background: var(--ok-bg); color: var(--ok-text); }
   .cpend { border-color: #854F0B; background: var(--pend-bg); color: var(--pend-text); }
   .cavaria { border-color: #993C1D; background: var(--avaria-bg); color: var(--avaria-text); }
-
+ 
   /* COLABORADOR CARDS */
   .cc { border: 1.5px solid var(--border); border-radius: var(--r); padding: 12px 14px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: flex-start; gap: 12px; transition: all .12s; user-select: none; }
   .cc:active, .cc:hover { background: var(--bg2); }
@@ -137,28 +137,28 @@
   .ct-opt:active { background: var(--bg2); }
   .ct-opt.ctsel { color: var(--blue); font-weight: 600; background: var(--blue-bg); }
   .ct-check { color: var(--blue); font-weight: 700; }
-
+ 
   /* POSTO PILLS */
   .posto-pill { display: inline-block; padding: 6px 12px; border: 0.5px solid var(--border2); border-radius: 20px; font-size: 12px; color: var(--text2); cursor: pointer; margin: 3px; transition: all .1s; }
   .posto-pill.sel { background: var(--blue); border-color: var(--blue); color: #fff; }
-
+ 
   /* INFO ROWS */
   .info-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 7px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
   .info-row:last-child { border-bottom: none; }
   .info-lbl { color: var(--text2); flex-shrink: 0; margin-right: 8px; }
   .info-val { color: var(--text); font-weight: 500; text-align: right; word-break: break-word; max-width: 65%; }
-
+ 
   /* ADMIN */
   .admin-row { display: flex; align-items: center; gap: 10px; padding: 11px 16px; border-bottom: 0.5px solid var(--border); }
   .admin-row:last-child { border-bottom: none; }
   .del-btn { background: none; border: none; cursor: pointer; color: var(--text3); font-size: 16px; padding: 4px 6px; line-height: 1; flex-shrink: 0; }
   .del-btn:hover, .del-btn:active { color: #c00; }
-
+ 
   /* TABS */
   .tab-bar { display: flex; border-bottom: 0.5px solid var(--border); margin-bottom: 14px; }
   .tab { flex: 1; padding: 10px 8px; text-align: center; font-size: 13px; color: var(--text2); cursor: pointer; border-bottom: 2.5px solid transparent; transition: all .12s; }
   .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
-
+ 
   /* MISC */
   .warn-box { background: var(--pend-bg); border-radius: var(--r-sm); padding: 11px 14px; margin-bottom: 12px; font-size: 13px; color: var(--pend-text); }
   .err-msg { font-size: 13px; color: #c00; margin-bottom: 10px; display: none; }
@@ -208,7 +208,7 @@ const EQ = [
     guarda:[{t:'Hopper esvaziado, sem resíduo úmido',h:'Abrir; descartar; passar pano se necessário'},{t:'Escovas limpas — sem fios ou detritos no eixo',h:'Retirar escovas e inspecionar o eixo'},{t:'Filtro HEPA limpo (acionar autolimpeza)',h:'Apertar botão de vibração por 10 s'},{t:'Guardada em posição vertical, local seco',h:'Verificar local e posição'}],
     transfer:[{t:'Bateria(s) XGT 40V presentes — modelo confirmado',h:'Checar gravação; não aceitar outra linha'},{t:'Escova principal e lateral em bom estado',h:'Inspeção visual comparativa'},{t:'Filtro HEPA íntegro — sem rasgo',h:'Retirar e inspecionar antes de transferir'},{t:'Hopper limpo e sem dano',h:'Abrir e inspecionar internamente'},{t:'Carregador XGT presente (se kit inclui)',h:'Conferir contra lista padrão'}]}}
 ];
-
+ 
 const TL = {uso:'Uso diário', guarda:'Guarda', transfer:'Transferência'};
 const TI = {uso:'🔧', guarda:'📦', transfer:'🔁'};
 const TCLS = {uso:'sb-uso', guarda:'sb-guarda', transfer:'sb-transfer'};
@@ -223,7 +223,7 @@ const uid = () => 'x'+Date.now().toString(36)+Math.random().toString(36).slice(2
 const bcls = s => s==='ok'?'b-ok':s==='pendencia'?'b-pend':s==='avaria'?'b-avaria':'b-novo';
 const blbl = s => s==='ok'?'OK':s==='pendencia'?'Pendência':s==='avaria'?'Avaria':'Sem registro';
 const fdt = iso => { if(!iso) return '—'; const d=new Date(iso); return d.toLocaleDateString('pt-BR')+' '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}); };
-
+ 
 // ═══════════════════════════════════════════════════════════
 // STORAGE (localStorage)
 // ═══════════════════════════════════════════════════════════
@@ -233,17 +233,30 @@ const db = {
 };
 const getCollabs = () => db.g('dm_collabs') || [];
 const setCollabs = a => db.s('dm_collabs', a);
-const getContratos = () => db.g('dm_contratos') || [];
+const CONTRATOS_PADRAO = [
+  {id:'ct1', cod:'706',  nome:'Mogi Limpeza Predial',       municipio:'Mogi das Cruzes, SP'},
+  {id:'ct2', cod:'1379', nome:'Valinhos Limpeza',            municipio:'Valinhos, SP'},
+  {id:'ct3', cod:'1383', nome:'Hortolândia Limpeza',         municipio:'Hortolândia, SP'},
+  {id:'ct4', cod:'1408', nome:'Universidade SCS Limpeza',    municipio:'São Caetano do Sul, SP'},
+  {id:'ct5', cod:'1397', nome:'Bertioga Limpeza',            municipio:'Bertioga, SP'},
+];
+const getContratos = () => {
+  const saved = db.g('dm_contratos');
+  if (saved && saved.length) return saved;
+  // first load: seed defaults and save
+  db.s('dm_contratos', CONTRATOS_PADRAO);
+  return CONTRATOS_PADRAO;
+};
 const setContratos = a => db.s('dm_contratos', a);
 const getLastRec = (eqId,tipo) => { const a=db.g('dm_r_'+eqId+'_'+tipo)||[]; return a.length?a[a.length-1]:null; };
 const pushRec = (eqId,tipo,rec) => { const k='dm_r_'+eqId+'_'+tipo; const a=db.g(k)||[]; a.push(rec); if(a.length>60) a.splice(0,a.length-60); db.s(k,a); };
-
+ 
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
 let S = { scr:'home', eq:null, tipo:null, chks:{}, colab:null, ctAtual:null, showCtSel:false, cond:'', obs:'', posto:'', adminTab:'collabs' };
 const go = patch => { Object.assign(S, patch); render(); };
-
+ 
 // ═══════════════════════════════════════════════════════════
 // RENDER DISPATCHER
 // ═══════════════════════════════════════════════════════════
@@ -252,7 +265,7 @@ function render() {
   const m = { home:scrHome, equip:scrEquip, selcolab:scrSelColab, checklist:scrChecklist, confirm:scrConfirm, success:scrSuccess, alog:scrAdminLogin, admin:scrAdmin, adm_nc:scrAdmNewCollab, adm_nct:scrAdmNewContract };
   if(m[S.scr]) m[S.scr](app);
 }
-
+ 
 // ═══════════════════════════════════════════════════════════
 // SCREENS
 // ═══════════════════════════════════════════════════════════
@@ -278,7 +291,7 @@ function scrHome(app) {
       <p style="font-size:11px;color:var(--text3);text-align:center;margin-top:8px">Demax · Gestão de Contratos · v1.0</p>
     </div>`;
 }
-
+ 
 function scrEquip(app) {
   const eq = EQ.find(e=>e.id===S.eq);
   let lastHtml = '';
@@ -315,7 +328,7 @@ function scrEquip(app) {
       </div>
     </div>`;
 }
-
+ 
 function scrSelColab(app) {
   const collabs=getCollabs(), contratos=getContratos();
   if(!collabs.length||!contratos.length) {
@@ -341,9 +354,9 @@ function scrSelColab(app) {
       </div>
     </div>`;
   }).join('');
-
+ 
   const postoHtml = POSTOS.map(p=>`<span class="posto-pill ${S.posto===p?'sel':''}" onclick="selPosto('${p}')">${p}</span>`).join('');
-
+ 
   app.innerHTML = `
     <div class="topbar"><button class="back-btn" onclick="go({scr:'equip'})">←</button><h1>${TI[S.tipo]} ${TL[S.tipo]}</h1></div>
     <div class="screen">
@@ -359,7 +372,7 @@ function scrSelColab(app) {
       <button class="btn btn-p" id="btn_cont" onclick="go({scr:'checklist'})" ${S.colab&&S.posto?'':'disabled'}>Continuar →</button>
     </div>`;
 }
-
+ 
 function selColab(id) {
   S.colab = getCollabs().find(c=>c.id===id)||null;
   S.ctAtual = null; S.showCtSel = false;
@@ -369,7 +382,7 @@ function toggleCtSel() { S.showCtSel = !S.showCtSel; render(); }
 function pickCt(id) { S.ctAtual = getContratos().find(t=>t.id===id)||null; S.showCtSel=false; render(); }
 function selPosto(p) { S.posto=p; const ip=document.getElementById('ip_posto'); if(ip)ip.value=''; render(); }
 function updBtn() { const b=document.getElementById('btn_cont'); if(b) b.disabled=!(S.colab&&S.posto.trim()); }
-
+ 
 function scrChecklist(app) {
   const eq = EQ.find(e=>e.id===S.eq);
   const itens = eq.itens[S.tipo];
@@ -398,7 +411,7 @@ function scrChecklist(app) {
       <button class="btn btn-s" onclick="go({scr:'equip'})">Cancelar</button>
     </div>`;
 }
-
+ 
 function tgl(i) {
   S.chks[i] = !S.chks[i];
   const b = document.querySelectorAll('.chkbox')[i];
@@ -409,7 +422,7 @@ function tgl(i) {
   if(pb) pb.style.width=Math.round(cnt/tot*100)+'%';
   if(pt) pt.textContent=cnt+' de '+tot+' itens verificados';
 }
-
+ 
 function scrConfirm(app) {
   const eq=EQ.find(e=>e.id===S.eq), itens=eq.itens[S.tipo];
   const pend=itens.filter((_,i)=>!S.chks[i]), cnt=itens.length-pend.length;
@@ -443,7 +456,7 @@ function scrConfirm(app) {
       </div></div>
     </div>`;
 }
-
+ 
 function setCond(v) {
   S.cond=v;
   document.querySelectorAll('.copt').forEach(el=>{
@@ -454,7 +467,7 @@ function setCond(v) {
   });
   const b=document.getElementById('btn_salv'); if(b) b.disabled=false;
 }
-
+ 
 function salvar() {
   const obsEl=document.getElementById('ip_obs'); if(obsEl) S.obs=obsEl.value.trim();
   const eq=EQ.find(e=>e.id===S.eq);
@@ -470,7 +483,7 @@ function salvar() {
   });
   go({scr:'success'});
 }
-
+ 
 function scrSuccess(app) {
   const eq=EQ.find(e=>e.id===S.eq);
   const ctEf=S.ctAtual||(getContratos().find(t=>t.id===S.colab?.ctId));
@@ -493,7 +506,7 @@ function scrSuccess(app) {
       <button class="btn btn-s" onclick="go({scr:'home',chks:{},colab:null,ctAtual:null,cond:'',obs:'',posto:''})">Tela inicial</button>
     </div>`;
 }
-
+ 
 // ── ADMIN ──
 function scrAdminLogin(app) {
   app.innerHTML = `
@@ -517,7 +530,7 @@ function chkPass() {
   if(v&&v.value===ADMIN_PASS) { go({scr:'admin',adminTab:'collabs'}); }
   else { const e=document.getElementById('pass_err'); if(e) e.style.display='block'; if(v) v.value=''; }
 }
-
+ 
 function scrAdmin(app) {
   const collabs=getCollabs(), contratos=getContratos();
   const collabsHtml = collabs.length ? collabs.map(c=>{
@@ -530,7 +543,7 @@ function scrAdmin(app) {
       </div>
       <button class="del-btn" onclick="delColab('${c.id}')">✕</button>
     </div>`;}).join('') : '<div class="empty-state">Nenhum colaborador cadastrado.</div>';
-
+ 
   const contratosHtml = contratos.length ? contratos.map(t=>`<div class="admin-row">
     <div class="item-info">
       <div class="item-name">${t.cod} · ${t.nome}</div>
@@ -538,7 +551,7 @@ function scrAdmin(app) {
     </div>
     <button class="del-btn" onclick="delContrato('${t.id}')">✕</button>
   </div>`).join('') : '<div class="empty-state">Nenhum contrato cadastrado.</div>';
-
+ 
   app.innerHTML = `
     <div class="topbar"><button class="back-btn" onclick="go({scr:'home'})">←</button><h1>Painel Admin</h1></div>
     <div class="screen">
@@ -556,7 +569,7 @@ function scrAdmin(app) {
       <button class="btn btn-s" onclick="go({scr:'home'})">Sair do Admin</button>
     </div>`;
 }
-
+ 
 function scrAdmNewCollab(app) {
   const contratos=getContratos();
   app.innerHTML = `
@@ -597,7 +610,7 @@ function addColab() {
   go({scr:'admin',adminTab:'collabs'});
 }
 function delColab(id) { const a=getCollabs().filter(c=>c.id!==id); setCollabs(a); go({scr:'admin',adminTab:'collabs'}); }
-
+ 
 function scrAdmNewContract(app) {
   app.innerHTML = `
     <div class="topbar"><button class="back-btn" onclick="go({scr:'admin',adminTab:'contratos'})">←</button><h1>Novo Contrato</h1></div>
@@ -622,7 +635,7 @@ function addContrato() {
   go({scr:'admin',adminTab:'contratos'});
 }
 function delContrato(id) { const a=getContratos().filter(t=>t.id!==id); setContratos(a); go({scr:'admin',adminTab:'contratos'}); }
-
+ 
 // INIT
 render();
 </script>
