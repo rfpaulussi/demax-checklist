@@ -254,7 +254,7 @@ const pushRec = (eqId,tipo,rec) => { const k='dm_r_'+eqId+'_'+tipo; const a=db.g
 // ═══════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════
-let S = { scr:'home', eq:null, tipo:null, chks:{}, colab:null, ctAtual:null, showCtSel:false, cond:'', obs:'', posto:'', adminTab:'collabs' };
+let S = { scr:'home', eq:null, tipo:null, chks:{}, colab:null, ctAtual:null, showCtSel:false, cond:'', obs:'', posto:'', adminTab:'collabs', erroSelColab:'' };
 const go = patch => { Object.assign(S, patch); render(); };
 
 // ═══════════════════════════════════════════════════════════
@@ -360,10 +360,12 @@ function scrSelColab(app) {
     `<span class="posto-pill ${S.posto===p?'sel':''}" onclick="selPosto('${p}')">${p}</span>`
   ).join('');
 
-  const podeAvancar = !!(S.colab && S.posto && S.posto.trim().length > 0);
+  const erroHtml = S.erroSelColab
+    ? `<div style="background:var(--avaria-bg);color:var(--avaria-text);padding:10px 14px;border-radius:var(--r-sm);margin-bottom:10px;font-size:13px;font-weight:500">${S.erroSelColab}</div>`
+    : '';
 
   app.innerHTML = `
-    <div class="topbar"><button class="back-btn" onclick="go({scr:'equip'})">←</button><h1>${TI[S.tipo]} ${TL[S.tipo]}</h1></div>
+    <div class="topbar"><button class="back-btn" onclick="go({scr:'equip',erroSelColab:''})">←</button><h1>${TI[S.tipo]} ${TL[S.tipo]}</h1></div>
     <div class="screen">
       <div class="field">
         <label>Quem está realizando esta inspeção? *</label>
@@ -374,21 +376,26 @@ function scrSelColab(app) {
         <div style="margin-bottom:8px">${postoHtml}</div>
         <input type="text" id="ip_posto" placeholder="Ou digite o local..."
           value="${!POSTOS.includes(S.posto)?S.posto:''}"
-          oninput="S.posto=this.value.trim();go({scr:'selcolab'})">
+          oninput="S.posto=this.value.trim();S.erroSelColab='';document.querySelectorAll('.posto-pill').forEach(el=>el.classList.remove('sel'))">
       </div>
-      <button class="btn btn-p" onclick="go({scr:'checklist'})" ${podeAvancar?'':'disabled'}>Continuar →</button>
+      ${erroHtml}
+      <button class="btn btn-p" onclick="tentarContinuar()">Continuar →</button>
     </div>`;
 }
 
+function tentarContinuar() {
+  if(!S.colab) { go({scr:'selcolab', erroSelColab:'Selecione um colaborador antes de continuar.'}); return; }
+  if(!S.posto||!S.posto.trim()) { go({scr:'selcolab', erroSelColab:'Selecione ou digite o posto/local antes de continuar.'}); return; }
+  go({scr:'checklist', erroSelColab:''});
+}
 function selColab(id) {
   S.colab = getCollabs().find(c=>c.id===id)||null;
-  S.ctAtual = null;
-  S.showCtSel = false;
+  S.ctAtual = null; S.showCtSel = false; S.erroSelColab = '';
   go({scr:'selcolab'});
 }
 function toggleCtSel() { S.showCtSel = !S.showCtSel; go({scr:'selcolab'}); }
 function pickCt(id) { S.ctAtual = getContratos().find(t=>t.id===id)||null; S.showCtSel=false; go({scr:'selcolab'}); }
-function selPosto(p) { S.posto = p; go({scr:'selcolab'}); }
+function selPosto(p) { S.posto = p; S.erroSelColab = ''; go({scr:'selcolab'}); }
 function updBtn() {}
 
 function scrChecklist(app) {
